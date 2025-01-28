@@ -12,7 +12,13 @@ public class TelegramMessageModel
         this.text = messageText;
         this.updateId = updateId;
     }
-
+     public TelegramMessageModel(long charId, string messageText)
+    {
+        this.charId = charId;
+        this.firstName = firstName;
+        this.text = messageText;
+        this.updateId = updateId;
+    }
     public override string ToString()
     {
         return $"{firstName} {text} {charId} {updateId}";

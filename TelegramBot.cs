@@ -9,7 +9,7 @@ public class TelegramBot
     {
         this.token = token;
         hc = new HttpClient();
-        hc.BaseAddress = new Uri($"https://api.telegram.org/bot{token}/getupdates?offset=526434289");
+        hc.BaseAddress = new Uri($"https://api.telegram.org/bot{token}/");
 
         thread = new Thread(GetUpdates);
     }
@@ -19,7 +19,7 @@ public class TelegramBot
         long offset = 0;
         while (true)
         {
-            string content = hc.GetStringAsync($"getupdates?offset={offset}");
+            string content = hc.GetStringAsync($"getupdates?offset={offset}").Result;
 
             var ms = new Json_Parser().GetMessage(content);
             if (ms.Length != 0)
@@ -37,7 +37,46 @@ public class TelegramBot
 
     public void SendMessage(long userId, string text)
     {
+        string answer = "залупа";
+        Random random = new Random(); 
+        switch (text.ToLower())
+        {
+            case "анекдот":
+                answer = "Нету у меня, отъебись";
+                break;
 
+            case "загадка":
+                answer = "Неа";
+                break;
+
+            case "паста про говно":
+                answer = "Govno";
+                break;
+
+            case "/gayness":
+                int randomNumber = random.Next (1, 101);
+                answer = $"Ты пидор на {randomNumber}%, поздравляю";
+                break;
+            case "/howbigmydick":
+                int randomN = random.Next (-2, 15);
+                if (randomN < 1)
+                {
+                    answer = $"Длина твоего члена -   {randomN} см, он у тебя в жопу врос";
+                } 
+                else
+                {
+                    answer = $"Длина твоего члена -   {randomN} см, коротыш";
+                }
+                break;
+
+            default:
+                answer = "Че ты спизданул?";
+                break;
+        }
+        string url = $"https://api.telegram.org/bot{token}/sendmessage?chat_id={userId}&text={answer}";
+       // var sent = hc.SendAsync(url);
+        //var req = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+        string content = hc.GetStringAsync(url).Result;
     }
 
     public void Start()
